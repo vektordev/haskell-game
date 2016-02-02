@@ -1,0 +1,25 @@
+name:                haskell-game
+version:             0.1.0.0
+synopsis:            simple game
+-- description:
+homepage:            http://github.com/vektordev/haskell-game
+license:             GPL-2
+license-file:        LICENSE
+author:              vpfanschilling@gmail.com
+maintainer:          vpfanschilling@gmail.com
+-- copyright:
+-- category:
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+executable haskell-game
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  ghc-options:         -O2 -threaded
+  default-language:    Haskell2010
+  build-depends:
+      base,
+      random,
+      gloss,
+      bytestring
