@@ -2,21 +2,25 @@ module GameState (
   GameState (..),
   Entity (..),
   step,
-  initial
+  initialGameState
 ) where
 
 import InputState
+import World
 
-initial = GameState [Entity 0 0 True, Entity 40 40 False]
+--initial = GameState [Entity 0 0 True, Entity 40 40 False] (World [Signal 1 1 1 (Pos 0.5 0.5)] 600 600)
+initialGameState = GameState [Entity 0 0 True, Entity 40 40 False] (mkWorld 10 400 400 60)
+
 data GameState = GameState {
-  entities :: [Entity]
-}
+  entities :: [Entity],
+  world :: World
+} deriving (Show, Read)
 
 data Entity = Entity {
   posX :: Int,
   posY :: Int,
   controlled :: Bool
-}
+} deriving (Show, Read)
 
 step :: InputState -> GameState -> GameState
 step inp st = st{entities = map (stepEntity st . applyInput inp st) $ entities st}
