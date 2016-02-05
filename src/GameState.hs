@@ -9,7 +9,7 @@ import InputState
 import World
 
 --initial = GameState [Entity 0 0 True, Entity 40 40 False] (World [Signal 1 1 1 (Pos 0.5 0.5)] 600 600)
-initialGameState = GameState [Entity 0 0 True, Entity 40 40 False] (mkWorld 10 400 400 60)
+initialGameState = GameState [Entity 0 0 True, Entity 40 40 False] (mkWorld 10 400 400 1)
 
 data GameState = GameState {
   entities :: [Entity],

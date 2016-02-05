@@ -8,6 +8,6 @@ data InputState = InputState {
   mvLeft :: Bool,
   mvUp :: Bool,
   mvDown :: Bool
-} deriving (Show, Read)
+} deriving (Show, Read, Eq)
 
 initialInputState = InputState False False False False

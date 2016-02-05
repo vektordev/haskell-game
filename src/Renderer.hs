@@ -50,7 +50,8 @@ normalize fls = Prelude.map (\f -> (f - low) / delta) fls
 postNormalize :: [Float] -> [Float]
 postNormalize fls = Prelude.map (\x -> ((x-0.5)^3) * 4 + 0.5) fls
 
-toGrey val = [255, floor (val * 255), floor (val * 255), floor (val * 255)]
+
+toGreyScale val = [255, floor (val * 255), floor (val * 255), floor (val * 255)]
 colorize val = [255, floor r, floor g, floor b]
   where (b,g,r) = colorizeWithColorSet val colorSet
 
