@@ -24,6 +24,9 @@ data ConnectionState =
 --TODO: Due to constraints with gloss' main loop, deallocation is currently quite impossible.
 --see http://blog.coldflake.com/posts/Simple-Networking/ for a simple example
 
+conditionalPrint :: String -> IO ()
+conditionalPrint str = return ()
+
 mkUnconnected :: ConnectionState
 mkUnconnected = Standalone
 
@@ -46,31 +49,31 @@ mkServer gamestate = do
 
 clientSendThread :: TMVar InputState -> IO ()
 clientSendThread is = do
-  putStrLn "starting client thread B"
+  conditionalPrint "starting client thread B"
   sock <- mkClientSendSocket
   loop sock
     where
       loop :: Socket -> IO ()
       loop socket = do
-        --putStrLn "sending message to server"
+        --conditionalPrint "sending message to server"
         inp <- atomically $ takeTMVar is
         send socket (show inp)
         loop socket
 
 clientRecvThread :: TVar GameState -> IO ()
 clientRecvThread gs = do
-  putStrLn "starting client thread A"
+  conditionalPrint "starting client thread A"
   sock <- mkClientRecvSocket
   loop sock
     where
       loop socket = do
-        putStrLn "waiting for message on thread A"
+        conditionalPrint "waiting for message on thread A"
         sockLoc <- getSocketName socket
         --sockRem <- getPeerName socket
-        putStrLn ("listening on: " ++ show sockLoc)
-        --putStrLn ("bound to: " ++ show sockRem)
+        conditionalPrint ("listening on: " ++ show sockLoc)
+        --conditionalPrint ("bound to: " ++ show sockRem)
         (msg,_,_) <- recvFrom socket 1024
-        putStrLn ("received message " ++ msg)
+        conditionalPrint ("received message " ++ msg)
         let mGS' = readMaybe msg
         unless (isNothing mGS') $ do
           --ignore the previous value of gs
@@ -92,10 +95,10 @@ serverSendThread gamestate clients = do
       dispense :: Socket -> GameState -> [SockAddr] -> IO()
       dispense socket gamestate clients = unless (null clients) $ do
         lngth <- sendTo socket (show gamestate) (changePort (head clients) 3444)
-        putStrLn ("dispensing a " ++ show lngth ++ " subset of a " ++ (show $ length $ show gamestate) ++ " long message, changing port to 3444")
+        conditionalPrint ("dispensing a " ++ show lngth ++ " subset of a " ++ (show $ length $ show gamestate) ++ " long message, changing port to 3444")
         sockLoc <- getSocketName socket
-        putStrLn ("from: " ++ show sockLoc)
-        putStrLn ("to: " ++ (show $ head clients))
+        conditionalPrint ("from: " ++ show sockLoc)
+        conditionalPrint ("to: " ++ (show $ head clients))
         dispense socket gamestate (tail clients)
 
 changePort (SockAddrInet _ addr) port = SockAddrInet port addr
@@ -107,7 +110,7 @@ serverRecvThread addToIS clients = do
     where
       loop socket = do
         (msg,lng,addr) <- recvFrom socket 1024
-        putStrLn "received message from client"
+        conditionalPrint "received message from client"
         --sendTo socket "Hello world" addr
         let mIS' = readMaybe msg
         unless (isNothing mIS') $ atomically $ modifyTVar addToIS (Map.insert addr (fromJust mIS'))

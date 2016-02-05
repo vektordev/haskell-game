@@ -23,7 +23,7 @@ render :: RendererState -> GameState -> Picture
 render (RendererState mPicture) (GameState ets wrld ) = Pictures (maybe id (:) mPicture (Prelude.map renderEntity ets))
 
 renderEntity :: Entity -> Picture
-renderEntity (Entity x y _) = Translate (fromIntegral x) (fromIntegral y) $ Pictures [Circle 10, Color red $ ThickCircle 5 10]
+renderEntity (Entity _ x y _) = Translate (fromIntegral x) (fromIntegral y) $ Pictures [Circle 10, Color red $ ThickCircle 5 10]
 
 renderWorld :: World -> Picture
 renderWorld wrld@(World sigs xres yres) = bitmapOfByteString xres yres (datas wrld) True
