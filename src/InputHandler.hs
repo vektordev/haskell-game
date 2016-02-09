@@ -19,4 +19,8 @@ handleEvt (EventKey (SpecialKey KeyUp) Down noModifiers flts) state = state {mvU
 handleEvt (EventKey (SpecialKey KeyUp) Up noModifiers flts) state = state {mvUp = False}
 handleEvt (EventKey (SpecialKey KeyDown) Down noModifiers flts) state = state {mvDown = True}
 handleEvt (EventKey (SpecialKey KeyDown) Up noModifiers flts) state = state {mvDown = False}
+handleEvt (EventKey (SpecialKey KeyPageUp) Down noModifiers flts) state = state {strafeLeft = True}
+handleEvt (EventKey (SpecialKey KeyPageUp) Up noModifiers flts) state = state {strafeLeft = False}
+handleEvt (EventKey (SpecialKey KeyPageDown) Down noModifiers flts) state = state {strafeRight = True}
+handleEvt (EventKey (SpecialKey KeyPageDown) Up noModifiers flts) state = state {strafeRight = False}
 handleEvt evt state = state

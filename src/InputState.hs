@@ -8,7 +8,9 @@ data InputState = InputState {
   mvRight :: Bool,
   mvLeft :: Bool,
   mvUp :: Bool,
-  mvDown :: Bool
+  mvDown :: Bool,
+  strafeLeft :: Bool,
+  strafeRight :: Bool
 } deriving (Show, Read, Eq)
 
-initialInputState = InputState 0 False False False False
+initialInputState = InputState 0 False False False False False False

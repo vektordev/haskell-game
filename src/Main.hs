@@ -66,7 +66,8 @@ initialCtl = ControlState initialInputState initialGameState initialRenderer mkU
 renderCtl :: ControlState -> IO Picture
 renderCtl cs = do
   cs'@(ControlState _ gs renderer _ _) <- clientPullLatestGamestate cs
-  return $ render renderer gs
+  let mEntity = fromJust (getByID gs ((controlledEntity . is) cs')) :: Entity
+  return $ render renderer gs mEntity
 
 stepIO :: Float -> ControlState -> IO ControlState
 stepIO f cs = do

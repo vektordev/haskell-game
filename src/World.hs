@@ -35,6 +35,8 @@ randomSignal rng =
 randomSlowSignal :: StdGen -> Signal
 randomSlowSignal rng =
   let
+    --TODO: Do a better job at sampling: Do not limit position to the actual map,
+    --and sample wav depending on amp.: The higher the amplitude, the higher the minimum wavelength.
     (posx, g1) = random rng
     (posy, g2) = random g1
     (amp,g3) = randomR (0, 3) g2
@@ -45,8 +47,8 @@ randomSlowSignal rng =
 randomFastSignal :: StdGen -> Signal
 randomFastSignal rng =
   let
-    (posx, g1) = random rng
-    (posy, g2) = random g1
+    (posx, g1) = randomR (-3, 4) rng
+    (posy, g2) = randomR (-3, 4) g1
     (amp,g3) = randomR (0, 1) g2
     (wav, g4) = randomR (0.01, 0.1) g3
     (phase, g5) = randomR (0, 2 * pi) g4

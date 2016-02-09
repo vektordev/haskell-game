@@ -19,11 +19,15 @@ data RendererState = RendererState {
 
 initialRenderer = RendererState Nothing
 
-render :: RendererState -> GameState -> Picture
-render (RendererState mPicture) (GameState ets wrld ) = Pictures (maybe id (:) mPicture (Prelude.map renderEntity ets))
+render :: RendererState -> GameState -> Entity -> Picture
+render (RendererState mPicture) (GameState ets wrld) playerEntity =
+  Translate 0 (-200) $
+  Rotate (rotation playerEntity - 90) $
+  Translate (- fromIntegral (posX playerEntity)) (- fromIntegral (posY playerEntity)) $
+    Pictures (maybe id (:) mPicture (Prelude.map renderEntity ets))
 
 renderEntity :: Entity -> Picture
-renderEntity (Entity _ x y _) = Translate (fromIntegral x) (fromIntegral y) $ Pictures [Circle 10, Color red $ ThickCircle 5 10]
+renderEntity (Entity _ x y angle) = Translate (fromIntegral x) (fromIntegral y) $ Rotate (-angle) $ Pictures [Circle 10, Color red $ ThickCircle 5 10, Line [(0,0),(15,0)]]
 
 renderWorld :: World -> Picture
 renderWorld wrld@(World sigs xres yres) = bitmapOfByteString xres yres (datas wrld) True

@@ -24,6 +24,22 @@ data ConnectionState =
 --TODO: Due to constraints with gloss' main loop, deallocation is currently quite impossible.
 --see http://blog.coldflake.com/posts/Simple-Networking/ for a simple example
 
+data Message = StateUpd GameState | InputData InputState | Fragment Int Int String deriving (Show, Read)
+
+{-
+joinFragments :: [Message] -> Message
+joinFragments = undefined
+
+packetLen :: Int
+packetLen = 1024
+
+fragmentMessageIfNeeded :: Message -> [Message]
+fragmentMessageIfNeeded msg = if (length $ show msg) > packetLen then [msg] else [Fragment ]
+  where
+    split msg = if length msg > packetLen then (take (packetLen - 24) msg) : (split $ drop (packetLen - 24) msg) else [msg]
+    subpacks msg = length $ split msg
+-}
+
 conditionalPrint :: String -> IO ()
 conditionalPrint str = return ()
 
@@ -95,10 +111,10 @@ serverSendThread gamestate clients = do
       dispense :: Socket -> GameState -> [SockAddr] -> IO()
       dispense socket gamestate clients = unless (null clients) $ do
         lngth <- sendTo socket (show gamestate) (changePort (head clients) 3444)
-        conditionalPrint ("dispensing a " ++ show lngth ++ " subset of a " ++ (show $ length $ show gamestate) ++ " long message, changing port to 3444")
+        conditionalPrint ("dispensing a " ++ show lngth ++ " subset of a " ++ show (length $ show gamestate) ++ " long message, changing port to 3444")
         sockLoc <- getSocketName socket
         conditionalPrint ("from: " ++ show sockLoc)
-        conditionalPrint ("to: " ++ (show $ head clients))
+        conditionalPrint ("to: " ++ show (head clients))
         dispense socket gamestate (tail clients)
 
 changePort (SockAddrInet _ addr) port = SockAddrInet port addr
