@@ -1,6 +1,5 @@
 module GameState (
-  GameState (..),
-  Entity (..),
+  module GameStateTypes,
   step,
   initialGameState,
   getByID
@@ -9,22 +8,12 @@ module GameState (
 import InputState
 import World
 import Debug.Trace
+import GameStateTypes
+import GameStateUtil
 
 --initial = GameState [Entity 0 0 True, Entity 40 40 False] (World [Signal 1 1 1 (Pos 0.5 0.5)] 600 600)
 initialGameState :: GameState
 initialGameState = GameState [Entity 0 0 0 0, Entity 1 40 40 0] (mkWorld 10 800 800 6)
-
-data GameState = GameState {
-  entities :: [Entity],
-  world :: World
-} deriving (Show, Read)
-
-data Entity = Entity {
-  ident :: Int,
-  posX :: Int,
-  posY :: Int,
-  rotation :: Float
-} deriving (Show, Read)
 
 step :: [InputState] -> GameState -> GameState
 step inps st = trace ("length input: " ++ show (length inps)) st{entities = ents'}
